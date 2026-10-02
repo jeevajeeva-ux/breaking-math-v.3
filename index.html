@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breaking Math — Mathematical & Engineering Formula Suite</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX for Mathematical Typesetting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+  <!-- Chart.js for Mathematical Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header Shell -->
+  <header class="app-header">
+    <div class="header-left">
+      <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <a href="#gallery" class="brand-logo" id="brandHomeLink">
+        <div class="logo-symbol">∫</div>
+        <div class="brand-text">
+          <span class="brand-title">Breaking Math</span>
+          <span class="version-badge">v1.0</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="header-center">
+      <div class="search-box">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="globalSearchInput" placeholder="Search formulas, variables, topics (e.g. Amdahl, Reynolds, Ohm)..." autocomplete="off" spellcheck="false">
+        <button class="search-clear" id="searchClearBtn" aria-label="Clear Search">&times;</button>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button class="theme-toggle" id="themeToggleBtn" aria-label="Toggle Color Theme" title="Toggle Light / Dark Mode">
+        <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="ghost-btn sign-in-btn" id="signInBtn">Sign In</button>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <div class="app-layout">
+    <!-- Category Sidebar Drawer -->
+    <aside class="app-sidebar" id="appSidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-title">Engineering Disciplines</span>
+      </div>
+      <nav class="sidebar-nav" id="sidebarCategoryNav">
+        <!-- Rendered dynamically in script.js -->
+      </nav>
+      <div class="sidebar-footer">
+        <div class="stat-pill">
+          <span class="stat-value">32</span>
+          <span class="stat-label">Calculators Online</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content Workspace -->
+    <main class="app-main" id="appMain">
+      <!-- 1. FORMULA GALLERY VIEW -->
+      <section class="gallery-view" id="galleryView">
+        <div class="gallery-header">
+          <div class="title-group">
+            <h1 class="view-title" id="galleryHeading">All Formulas</h1>
+            <p class="view-subtitle" id="gallerySubheading">Comprehensive mathematical suite spanning 5 disciplines.</p>
+          </div>
+          <div class="gallery-metrics">
+            <span class="badge" id="formulaMatchCount">32 formulas</span>
+          </div>
+        </div>
+
+        <!-- Category Chip Bar -->
+        <div class="filter-chip-bar" id="categoryChips"></div>
+
+        <!-- Formula Cards Grid -->
+        <div class="formula-grid" id="formulaCardsGrid"></div>
+
+        <!-- Empty State -->
+        <div class="empty-state hidden" id="emptyState">
+          <div class="empty-icon">∅</div>
+          <h3>No matching formulas found</h3>
+          <p>Try refining your query, checking for spelling, or selecting another discipline.</p>
+          <button class="action-btn" id="resetSearchFilterBtn">Clear Filters</button>
+        </div>
+      </section>
+
+      <!-- 2. FORMULA WORKSPACE VIEW -->
+      <section class="workspace-view hidden" id="workspaceView">
+        <div class="workspace-top-bar">
+          <nav class="breadcrumb-trail">
+            <a href="#gallery" class="breadcrumb-link" id="breadcrumbRoot">Formulas</a>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-link" id="breadcrumbCategory">Discipline</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-current" id="breadcrumbTitle">Formula Title</span>
+          </nav>
+          <div class="workspace-actions">
+            <button class="action-btn secondary-btn" id="btnBackToGallery">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+              Gallery
+            </button>
+          </div>
+        </div>
+
+        <div class="workspace-hero">
+          <div class="workspace-meta">
+            <span class="category-badge" id="workspaceCategoryBadge">Discipline</span>
+            <h2 class="formula-headline" id="workspaceFormulaTitle">Formula Title</h2>
+            <p class="formula-description" id="workspaceDescription">Technical explanation.</p>
+          </div>
+          <div class="formula-banner">
+            <div class="rendered-math-display" id="workspaceLatexDisplay"></div>
+          </div>
+        </div>
+
+        <!-- Split Grid: Inputs vs Results -->
+        <div class="calculator-grid">
+          <!-- Inputs Card -->
+          <div class="calc-panel input-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">Parameter Inputs</h3>
+              <button class="tiny-btn" id="btnResetDefaults" title="Restore default reference parameters">Reset</button>
+            </div>
+            <form id="calculatorForm" class="inputs-form" onsubmit="event.preventDefault();">
+              <div class="inputs-container" id="inputsContainer"></div>
+              <div class="validation-message-box hidden" id="validationAlert"></div>
+              <div class="form-actions">
+                <button type="submit" class="action-btn primary-btn" id="btnCalculate">Calculate</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Outputs Card -->
+          <div class="calc-panel result-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">Computed Solution</h3>
+              <div class="panel-tool-group">
+                <button class="tiny-btn" id="btnCopyLatex" title="Copy Formula LaTeX">Copy LaTeX</button>
+                <button class="tiny-btn" id="btnCopyResult" title="Copy Final Result">Copy Result</button>
+              </div>
+            </div>
+
+            <!-- Primary Output Display -->
+            <div class="output-hero" id="outputHeroBox">
+              <div class="output-label" id="outputHeroLabel">Result</div>
+              <div class="output-primary-row">
+                <span class="output-number" id="outputHeroValue">—</span>
+                <span class="output-unit" id="outputHeroUnit"></span>
+              </div>
+              <div class="secondary-metrics-grid" id="secondaryMetricsGrid"></div>
+            </div>
+
+            <!-- Mathematical Steps Accordion -->
+            <div class="calculation-steps-section">
+              <h4 class="section-subtitle">Derivation & Substitution Steps</h4>
+              <div class="steps-flow" id="stepsContainer"></div>
+            </div>
+
+            <!-- Visualization Container -->
+            <div class="visualization-section" id="visualizationSection">
+              <h4 class="section-subtitle" id="visualizationTitle">Technical Visualization</h4>
+              <div class="canvas-wrap" id="chartCanvasContainer">
+                <canvas id="formulaChart"></canvas>
+              </div>
+              <div id="diagramContainer" class="diagram-wrap hidden"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Sign In Informational Modal -->
+  <div class="modal-backdrop hidden" id="infoModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Breaking Math Access</h3>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-callout-icon">✓</div>
+        <h4>Breaking Math calculators are 100% free to use.</h4>
+        <p>No account, registration, or subscription is required to evaluate engineering formulas or view derivations.</p>
+        <div class="features-list">
+          <div>• Instant local browser-side execution</div>
+          <div>• KaTeX step-by-step mathematical breakdown</div>
+          <div>• Chart.js interactive parameter curves</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="action-btn primary-btn" id="modalAcknowledgeBtn">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Educational Footer -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <strong>Breaking Math</strong> — Interactive mathematical & engineering formula suite.
+        <div class="footer-stats">32 formulas • 5 disciplines • Free to use • Frontend-only application</div>
+      </div>
+      <div class="footer-disclaimer">
+        Breaking Math provides educational calculations. Verify engineering and scientific results against applicable standards, design codes, textbooks, and professional guidance before using them for real-world decisions.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core Script -->
+  <script src="script.js"></script>
+</body>
+</html>
